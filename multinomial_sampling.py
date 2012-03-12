@@ -7,7 +7,7 @@ def sample(weights):
     u = random_sample() * sum(weights)
     sample = 0
     weight_sum = weights[0]
-    while sample < len(weights) and weight_sum <= u:
+    while sample < len(weights) - 1 and weight_sum <= u:
         sample += 1
         weight_sum += weights[sample]
     return sample
