@@ -1,5 +1,5 @@
 from scipy.stats import norm, invgamma
-from numpy import sqrt, asarray, zeros
+from numpy import sqrt, asarray, zeros, append
 
 import multinomial_sampling
 reload(multinomial_sampling)
@@ -46,11 +46,9 @@ class DPMNormals(object):
             return r_vars
 
     def __create_weight_vector(self, x, means, counts, s2, m0, s20, m):
-        weights = []
-        for current_mean, current_count in zip(means, counts):
-            weights.append(current_count * norm.pdf(x, loc=current_mean,
-                                                    scale=sqrt(s2)))
-        weights.append(m * norm.pdf(x, loc=m0, scale=sqrt(s20 + s2)))
+        weights = counts * norm.pdf(x, loc=means, scale=sqrt(s2))
+        weights = append(weights,
+                         m * norm.pdf(x, loc=m0, scale=sqrt(s20 + s2)))
         return weights
 
     def __fix_hole(self, assignments, sums, means, counts,
